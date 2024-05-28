@@ -1,6 +1,7 @@
 # Importando tkinter
 from tkinter import *
-from tkinter import Tk, StringVar, ttk
+from tkinter import Tk, StringVar, ttk, messagebox
+from tkinter import filedialog as fd
 
 # Importando pillow
 from PIL import Image, ImageTk
@@ -48,7 +49,6 @@ frame_baixo.grid(row=2, column=0, pady=0, padx=0, sticky=NSEW)
 # Função inserir
 def inserir():
     global imagem, imagem_string, l_imagem
-
     nome = e_nome.get()
     local = e_local.get()
     descricao = e_desc.get()
@@ -70,18 +70,28 @@ def inserir():
     messagebox.showinfo('Sucesso', 'Os dados foram inseridos com sucesso')
 
     # Limpando os campos
-    nome.delete(0, 'end')
-    local.delete(0, 'end')
-    descricao.delete(0, 'end')
-    marca.delete(0, 'end')
-    data.delete(0, 'end')
-    valor.delete(0, 'end')
-    serie.delete(0, 'end')
-
-    for widget in frame_meio.winfo_children():
-        widget.destroy()
+    e_nome.delete(0, 'end')
+    e_local.delete(0, 'end')
+    e_desc.delete(0, 'end')
+    e_marca.delete(0, 'end')
+    e_cal.delete(0, 'end')
+    e_valor.delete(0, 'end')
+    e_serie.delete(0, 'end')
 
     mostrar()
+
+# Função para escolher imagem
+def escolher_imagem():
+    global imagem, imagem_string, l_imagem
+    imagem = fd.askopenfilename()
+    imagem_string = imagem
+
+    imagem = Image.open(imagem)
+    imagem = imagem.resize((170, 170))
+    imagem = ImageTk.PhotoImage(imagem)
+
+    l_img = Label(frame_meio, image=imagem, bg=branco, fg=verde)
+    l_img.place(x=900, y=10)
 
 
 # Trabalhando no frame do topo
@@ -145,10 +155,11 @@ e_serie = Entry(frame_meio, width=30, justify='left', relief=SOLID)
 e_serie.place(x=130, y=176)
 
 # Imagem do item
+# Botão carregar
 l_item = Label(frame_meio, text='Imagem do item', height=1, anchor=NW, bg=branco, fg=cor_letra)
 l_item.place(x=10, y=205)
 
-b_carregar = Button(frame_meio, text='Carregar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_carregar = Button(frame_meio, command=escolher_imagem, text='Carregar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
 b_carregar.place(x=130, y=205)
 
 # Botão inserir
@@ -187,7 +198,7 @@ def mostrar():
     # Criando a tabela
     tabela_head = ['#ID', 'Nome', 'Local', 'Descrição', 'Marca', 'Data da Compra', 'Valor da Compra', 'Número de Série']
 
-    lista_itens = []
+    lista_itens = ver_todos_dados()
 
     tree = ttk.Treeview(frame_baixo, selectmode='extended', columns=tabela_head, show='headings')
 
