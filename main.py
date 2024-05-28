@@ -155,6 +155,24 @@ def atualizar():
     except IndexError:
         messagebox.showerror('Erro', 'Selecione um item da tabela')
 
+# Função deletar
+def deletar():
+    try:
+        # Pegando dados da linha selecionada na tabela
+        tree_ver_dados = tree.focus()
+        tree_ver_dicionario = tree.item(tree_ver_dados)
+        tree_ver_lista = tree_ver_dicionario['values']
+
+        valor = tree_ver_lista[0]
+
+        deletar_dados([valor])
+
+        messagebox.showinfo('Sucesso', 'Os dados foram deletados com sucesso')
+        mostrar()
+
+    except IndexError:
+        messagebox.showerror('Erro', 'Selecione um item da tabela')
+
 
 # Função para escolher imagem
 def escolher_imagem():
@@ -269,7 +287,7 @@ b_update = Button(frame_meio, command=atualizar, text='Atualizar'.upper(), width
 b_update.place(x=385, y=45)
 
 # Botão Deletar
-b_deletar = Button(frame_meio, text='Deletar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_deletar = Button(frame_meio, command=deletar, text='Deletar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
 b_deletar.place(x=385, y=85)
 
 # Botão Ver Item
