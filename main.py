@@ -1,14 +1,14 @@
 # Importando tkinter
 from tkinter import *
-from tkinter import Tk, StringVar, ttk, messagebox
+from tkinter import Tk, ttk, messagebox
 from tkinter import filedialog as fd
 
 # Importando pillow
 from PIL import Image, ImageTk
 
 # Importando Tkcalendar
-from tkcalendar import Calendar, DateEntry
-from datetime import date, datetime
+from tkcalendar import DateEntry
+from datetime import datetime
 
 # Importando funções da view
 from view import *
@@ -88,8 +88,6 @@ def atualizar():
         tree_ver_dados = tree.focus()
         tree_ver_dicionario = tree.item(tree_ver_dados)
         tree_ver_lista = tree_ver_dicionario['values']
-
-        valor = tree_ver_lista[0]
 
         # Limpando os campos
         e_nome.delete(0, 'end')
