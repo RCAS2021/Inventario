@@ -117,27 +117,66 @@ b_ver_item.place(x=385, y=175)
 
 # Labels Quantidade Total e Valores
 # Total
-l_total = Label(frame_meio, text='', height=3, width=25, anchor=CENTER, bg=ciano, fg=branco)
+l_total = Label(frame_meio, text='', height=3, width=25, pady=20, anchor=CENTER, bg=ciano, fg=branco)
 l_total.place(x=650, y=7)
 
-l_valor_total = Label(frame_meio, text='Valor Total dos Itens', width=25, height=2, anchor=NW, bg=ciano, fg=branco)
+l_valor_total = Label(frame_meio, text='Valor Total dos Itens', width=25, height=1, anchor=NW, bg=ciano, fg=branco)
 l_valor_total.place(x=650, y=5)
 
-l_qtd = Label(frame_meio, text='', height=4, width=25, anchor=CENTER, bg=ciano, fg=branco)
-l_qtd.place(x=650, y=90)
+l_qtd = Label(frame_meio, text='', height=3, width=25, pady=20, anchor=CENTER, bg=ciano, fg=branco)
+l_qtd.place(x=650, y=133)
 
-l_qtd_total = Label(frame_meio, text='Quantidade de itens', width=25, height=2, anchor=NW, bg=ciano, fg=branco)
-l_qtd_total.place(x=650, y=92)
+l_qtd_total = Label(frame_meio, text='Quantidade de itens', width=25, height=1, anchor=NW, bg=ciano, fg=branco)
+l_qtd_total.place(x=650, y=135)
 
+# Trabalhando no frame de baixo
+# Criando a tabela
+tabela_head = ['#ID', 'Nome', 'Local', 'Descrição', 'Marca', 'Data da Compra', 'Valor da Compra', 'Número de Série']
 
+lista_itens = []
 
+global tree
 
+tree = ttk.Treeview(frame_baixo, selectmode='extended', columns=tabela_head, show='headings')
 
+# Scrollbar vertical
+vsb = ttk.Scrollbar(frame_baixo, orient='vertical', command=tree.yview)
 
+# Scrollbar horizontal
+hsb = ttk.Scrollbar(frame_baixo, orient='horizontal', command=tree.xview)
 
+tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
 
+tree.grid(column=0, row=0, sticky='nsew')
+vsb.grid(column=1, row=0, sticky='ns')
+hsb.grid(column=0, row=1, sticky='ew')
+frame_baixo.grid_rowconfigure(0, weight=12)
 
+hd = ['center', 'center', 'center', 'center', 'center', 'center', 'center', 'center']
+h = [40, 150, 125, 260, 130, 160, 160, 160]
+n = 0
 
+for col in tabela_head:
+    tree.heading(col, text=col.title(), anchor=CENTER)
+    tree.column(col, width=h[n], anchor=hd[n])
+
+    n += 1
+
+# Inserindo itens na tabela
+for item in lista_itens:
+    tree.insert('', 'end', values=item)
+
+# Calculando valor total e total de itens
+quantidade = []
+for item in lista_itens:
+    quantidade.append(item[6])
+
+total_valor = sum(quantidade)
+total_itens = len(quantidade)
+
+# Atualizando os textos das labels
+l_total['text'] = f'R$ {total_valor:,.2f}'
+l_qtd['text'] = total_itens
 
 
 janela.mainloop()
