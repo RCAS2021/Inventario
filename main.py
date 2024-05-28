@@ -1,6 +1,13 @@
+# Importando tkinter
 from tkinter import *
 from tkinter import Tk, StringVar, ttk
+
+# Importando pillow
 from PIL import Image, ImageTk
+
+# Importando Tkcalendar
+from tkcalendar import Calendar, DateEntry
+from datetime import date, datetime
 
 # Cores
 branco = "#feffff"
@@ -15,7 +22,7 @@ verde_escuro = "#263238"
 # Criando Janela
 janela = Tk()
 janela.title('Inventário')
-janela.geometry('900x600')
+janela.geometry('1200x600')
 janela.configure(background=verde_escuro)
 janela.resizable(width=FALSE, height=FALSE)
 
@@ -23,23 +30,114 @@ style = ttk.Style(janela)
 style.theme_use("clam")
 
 # Criando frames
-frame_topo = Frame(janela, width=900, height=50, bg=branco, relief=FLAT)
+frame_topo = Frame(janela, width=1200, height=50, bg=branco, relief=FLAT)
 frame_topo.grid(row=0, column=0)
 
-frame_meio = Frame(janela, width=900, height=300, bg=branco, pady=20, relief=FLAT)
+frame_meio = Frame(janela, width=1200, height=300, bg=branco, pady=20, relief=FLAT)
 frame_meio.grid(row=1, column=0, pady=1, padx=0, sticky=NSEW)
 
-frame_baixo = Frame(janela, width=900, height=300, bg=branco, relief=FLAT)
-frame_baixo.grid(row=2, column=0, pady=0, padx=1, sticky=NSEW)
+frame_baixo = Frame(janela, width=1200, height=300, bg=branco, relief=FLAT)
+frame_baixo.grid(row=2, column=0, pady=0, padx=0, sticky=NSEW)
 
-
+# Trabalhando no frame do topo
 # Abrindo imagem
 logo_img = Image.open('logo.png')
 logo_img = logo_img.resize((45, 45))
 logo_img = ImageTk.PhotoImage(logo_img)
 
-logo = Label(frame_topo, image=logo_img, text=' Inventário', width=900, compound=LEFT, relief=RAISED, anchor=NW, font=('Verdana 20 bold'), bg=branco, fg=cor_letra)
+logo = Label(frame_topo, image=logo_img, text=' Inventário', width=1200, compound=LEFT, relief=RAISED, anchor=NW, font=('Verdana 20 bold'), bg=branco, fg=cor_letra)
 logo.place(x=0, y=0)
+
+# Trabalhando no frame do meio
+# Criando entradas
+# Nome
+l_nome = Label(frame_meio, text='Nome', height=1, anchor=NW, bg=branco, fg=cor_letra)
+l_nome.place(x=10, y=5)
+
+e_nome = Entry(frame_meio, width=30, justify='left', relief=SOLID)
+e_nome.place(x=130, y=6)
+
+# Localização
+l_local = Label(frame_meio, text='Local', height=1, anchor=NW, bg=branco, fg=cor_letra)
+l_local.place(x=10, y=30)
+
+e_local = Entry(frame_meio, width=30, justify='left', relief=SOLID)
+e_local.place(x=130, y=31)
+
+# Descrição
+l_desc = Label(frame_meio, text='Descrição', height=1, anchor=NW, bg=branco, fg=cor_letra)
+l_desc.place(x=10, y=55)
+
+e_desc = Entry(frame_meio, width=30, justify='left', relief=SOLID)
+e_desc.place(x=130, y=56)
+
+# Data
+l_cal = Label(frame_meio, text='Data da Compra', height=1, anchor=NW, bg=branco, fg=cor_letra)
+l_cal.place(x=10, y=85)
+
+e_cal = DateEntry(frame_meio, width=28, Background='darkblue', bordewidth=2, year=datetime.now().year, relief=SOLID)
+e_cal.place(x=130, y=86)
+
+# Valor da Compra
+l_valor = Label(frame_meio, text='Valor da Compra', height=1, anchor=NW, bg=branco, fg=cor_letra)
+l_valor.place(x=10, y=115)
+
+e_valor = Entry(frame_meio, width=30, justify='left', relief=SOLID)
+e_valor.place(x=130, y=116)
+
+# Número de série
+l_serie = Label(frame_meio, text='Número de Série', height=1, anchor=NW, bg=branco, fg=cor_letra)
+l_serie.place(x=10, y=145)
+
+e_serie = Entry(frame_meio, width=30, justify='left', relief=SOLID)
+e_serie.place(x=130, y=146)
+
+# Imagem do item
+l_item = Label(frame_meio, text='Imagem do item', height=1, anchor=NW, bg=branco, fg=cor_letra)
+l_item.place(x=10, y=175)
+
+b_carregar = Button(frame_meio, text='Carregar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_carregar.place(x=130, y=175)
+
+# Botão inserir
+b_inserir = Button(frame_meio, text='Adicionar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_inserir.place(x=385, y=5)
+
+# Botão Atualizar
+b_update = Button(frame_meio, text='Atualizar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_update.place(x=385, y=45)
+
+# Botão Deletar
+b_deletar = Button(frame_meio, text='Deletar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_deletar.place(x=385, y=85)
+
+# Botão Ver Item
+b_ver_item = Button(frame_meio, text='Ver Item'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_ver_item.place(x=385, y=175)
+
+# Labels Quantidade Total e Valores
+# Total
+l_total = Label(frame_meio, text='', height=3, width=25, anchor=CENTER, bg=ciano, fg=branco)
+l_total.place(x=650, y=7)
+
+l_valor_total = Label(frame_meio, text='Valor Total dos Itens', width=25, height=2, anchor=NW, bg=ciano, fg=branco)
+l_valor_total.place(x=650, y=5)
+
+l_qtd = Label(frame_meio, text='', height=4, width=25, anchor=CENTER, bg=ciano, fg=branco)
+l_qtd.place(x=650, y=90)
+
+l_qtd_total = Label(frame_meio, text='Quantidade de itens', width=25, height=2, anchor=NW, bg=ciano, fg=branco)
+l_qtd_total.place(x=650, y=92)
+
+
+
+
+
+
+
+
+
+
 
 
 janela.mainloop()
