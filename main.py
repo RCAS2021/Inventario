@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import Tk, StringVar, ttk
+from PIL import Image, ImageTk
 
 # Cores
 branco = "#feffff"
@@ -30,6 +31,16 @@ frame_meio.grid(row=1, column=0, pady=1, padx=0, sticky=NSEW)
 
 frame_baixo = Frame(janela, width=900, height=300, bg=branco, relief=FLAT)
 frame_baixo.grid(row=2, column=0, pady=0, padx=1, sticky=NSEW)
+
+
+# Abrindo imagem
+logo_img = Image.open('logo.png')
+logo_img = logo_img.resize((45, 45))
+logo_img = ImageTk.PhotoImage(logo_img)
+
+logo = Label(frame_topo, image=logo_img, text=' Inventário', width=900, compound=LEFT, relief=RAISED, anchor=NW, font=('Verdana 20 bold'), bg=branco, fg=cor_letra)
+logo.place(x=0, y=0)
+
 
 janela.mainloop()
 
