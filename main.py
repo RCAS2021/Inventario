@@ -93,6 +93,28 @@ def escolher_imagem():
     l_img = Label(frame_meio, image=imagem, bg=branco, fg=verde)
     l_img.place(x=900, y=10)
 
+# Função para ver imagem
+def ver_imagem():
+    global imagem, imagem_string, l_imagem
+
+    # Pegando dados da linha selecionada na tabela
+    tree_ver_dados = tree.focus()
+    tree_ver_dicionario = tree.item(tree_ver_dados)
+    tree_ver_lista = tree_ver_dicionario['values']
+
+    valor = [int(tree_ver_lista[0])]
+
+    item = ver_dados_individuais(valor)
+
+    imagem = item[0][8]
+
+    imagem = Image.open(imagem)
+    imagem = imagem.resize((170, 170))
+    imagem = ImageTk.PhotoImage(imagem)
+
+    l_img = Label(frame_meio, image=imagem, bg=branco, fg=verde)
+    l_img.place(x=900, y=10)
+
 
 # Trabalhando no frame do topo
 # Abrindo imagem
@@ -175,7 +197,7 @@ b_deletar = Button(frame_meio, text='Deletar'.upper(), width=29, compound=CENTER
 b_deletar.place(x=385, y=85)
 
 # Botão Ver Item
-b_ver_item = Button(frame_meio, text='Ver Item'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_ver_item = Button(frame_meio, command=ver_imagem, text='Ver Item'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
 b_ver_item.place(x=385, y=205)
 
 # Labels Quantidade Total e Valores
@@ -195,6 +217,8 @@ l_qtd_total.place(x=650, y=135)
 # Trabalhando no frame de baixo
 
 def mostrar():
+    global tree
+
     # Criando a tabela
     tabela_head = ['#ID', 'Nome', 'Local', 'Descrição', 'Marca', 'Data da Compra', 'Valor da Compra', 'Número de Série']
 
@@ -244,5 +268,3 @@ def mostrar():
 mostrar()
 
 janela.mainloop()
-
-

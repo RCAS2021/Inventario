@@ -51,6 +51,4 @@ def ver_dados_individuais(id):
         rows = cur.fetchall()
         for row in rows:
             ver_dados_individuais.append(row)
-
-
-
+    return ver_dados_individuais
