@@ -64,7 +64,7 @@ def inserir():
         if i == '':
             messagebox.showerror('Erro', 'Preencha todos os campos')
             return
-    
+
     inserir_dados(lista_inserir)
 
     messagebox.showinfo('Sucesso', 'Os dados foram inseridos com sucesso')

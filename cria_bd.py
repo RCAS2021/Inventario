@@ -7,4 +7,3 @@ con = lite.connect("dados.db")
 with con:
     cur=con.cursor()
     cur.execute("CREATE TABLE inventario(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, local TEXT, descricao TEXT, marca TEXT, data DATE, valor DECIMAL, serie TEXT, imagem TEXT)")
-
