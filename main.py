@@ -80,6 +80,82 @@ def inserir():
 
     mostrar()
 
+# Função atualizar
+def atualizar():
+    global imagem, imagem_string, l_imagem
+    try:
+        # Pegando dados da linha selecionada na tabela
+        tree_ver_dados = tree.focus()
+        tree_ver_dicionario = tree.item(tree_ver_dados)
+        tree_ver_lista = tree_ver_dicionario['values']
+
+        valor = tree_ver_lista[0]
+
+        # Limpando os campos
+        e_nome.delete(0, 'end')
+        e_local.delete(0, 'end')
+        e_desc.delete(0, 'end')
+        e_marca.delete(0, 'end')
+        e_cal.delete(0, 'end')
+        e_valor.delete(0, 'end')
+        e_serie.delete(0, 'end')
+
+        # Inserindo dados nos campos
+        id = int(tree_ver_lista[0])
+        e_nome.insert(0, tree_ver_lista[1])
+        e_local.insert(0, tree_ver_lista[2])
+        e_desc.insert(0, tree_ver_lista[3])
+        e_marca.insert(0, tree_ver_lista[4])
+        e_cal.insert(0, tree_ver_lista[5])
+        e_valor.insert(0, tree_ver_lista[6])
+        e_serie.insert(0, tree_ver_lista[7])
+        imagem_string = tree_ver_lista[8]
+
+        def update():
+            global imagem, imagem_string, l_imagem
+
+            nome = e_nome.get()
+            local = e_local.get()
+            descricao = e_desc.get()
+            marca = e_marca.get()
+            data = e_cal.get()
+            valor = e_valor.get()
+            serie = e_serie.get()
+            imagem = imagem_string
+
+            if imagem == '':
+                e_serie.insert(0, tree_ver_lista[8])
+
+            lista_atualizar = [nome, local, descricao, marca, data, valor, serie, imagem, id]
+
+            for i in lista_atualizar:
+                if i == '':
+                    messagebox.showerror('Erro', 'Preencha todos os campos')
+                    return
+
+            atualizar_dados(lista_atualizar)
+            messagebox.showinfo('Sucesso', 'Os dados foram atualizados com sucesso')
+
+            # Limpando os campos
+            e_nome.delete(0, 'end')
+            e_local.delete(0, 'end')
+            e_desc.delete(0, 'end')
+            e_marca.delete(0, 'end')
+            e_cal.delete(0, 'end')
+            e_valor.delete(0, 'end')
+            e_serie.delete(0, 'end')
+
+            b_confirmar.destroy()
+            mostrar()
+
+        # Botão confirmar atualização
+        b_confirmar = Button(frame_meio, command=update, text='Confirmar'.upper(), width=61, overrelief=RIDGE, bg=branco, fg=cor_letra)
+        b_confirmar.place(x=130, y=243)
+
+    except IndexError:
+        messagebox.showerror('Erro', 'Selecione um item da tabela')
+
+
 # Função para escolher imagem
 def escolher_imagem():
     global imagem, imagem_string, l_imagem
@@ -189,7 +265,7 @@ b_inserir = Button(frame_meio, command=inserir, text='Adicionar'.upper(), width=
 b_inserir.place(x=385, y=5)
 
 # Botão Atualizar
-b_update = Button(frame_meio, text='Atualizar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_update = Button(frame_meio, command=atualizar, text='Atualizar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
 b_update.place(x=385, y=45)
 
 # Botão Deletar
