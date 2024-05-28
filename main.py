@@ -9,6 +9,11 @@ from PIL import Image, ImageTk
 from tkcalendar import Calendar, DateEntry
 from datetime import date, datetime
 
+# Importando funções da view
+from view import *
+
+global tree
+
 # Cores
 branco = "#feffff"
 verde = "#4fa882"
@@ -38,6 +43,46 @@ frame_meio.grid(row=1, column=0, pady=1, padx=0, sticky=NSEW)
 
 frame_baixo = Frame(janela, width=1200, height=300, bg=branco, relief=FLAT)
 frame_baixo.grid(row=2, column=0, pady=0, padx=0, sticky=NSEW)
+
+# Criando funções
+# Função inserir
+def inserir():
+    global imagem, imagem_string, l_imagem
+
+    nome = e_nome.get()
+    local = e_local.get()
+    descricao = e_desc.get()
+    marca = e_marca.get()
+    data = e_cal.get()
+    valor = e_valor.get()
+    serie = e_serie.get()
+    imagem = imagem_string
+
+    lista_inserir = [nome, local, descricao, marca, data, valor, serie, imagem]
+
+    for i in lista_inserir:
+        if i == '':
+            messagebox.showerror('Erro', 'Preencha todos os campos')
+            return
+    
+    inserir_dados(lista_inserir)
+
+    messagebox.showinfo('Sucesso', 'Os dados foram inseridos com sucesso')
+
+    # Limpando os campos
+    nome.delete(0, 'end')
+    local.delete(0, 'end')
+    descricao.delete(0, 'end')
+    marca.delete(0, 'end')
+    data.delete(0, 'end')
+    valor.delete(0, 'end')
+    serie.delete(0, 'end')
+
+    for widget in frame_meio.winfo_children():
+        widget.destroy()
+
+    mostrar()
+
 
 # Trabalhando no frame do topo
 # Abrindo imagem
@@ -71,36 +116,43 @@ l_desc.place(x=10, y=55)
 e_desc = Entry(frame_meio, width=30, justify='left', relief=SOLID)
 e_desc.place(x=130, y=56)
 
+# Marca
+l_marca = Label(frame_meio, text='Marca', height=1, anchor=NW, bg=branco, fg=cor_letra)
+l_marca.place(x=10, y=85)
+
+e_marca = Entry(frame_meio, width=30, justify='left', relief=SOLID)
+e_marca.place(x=130, y=86)
+
 # Data
 l_cal = Label(frame_meio, text='Data da Compra', height=1, anchor=NW, bg=branco, fg=cor_letra)
-l_cal.place(x=10, y=85)
+l_cal.place(x=10, y=115)
 
 e_cal = DateEntry(frame_meio, width=28, Background='darkblue', bordewidth=2, year=datetime.now().year, relief=SOLID)
-e_cal.place(x=130, y=86)
+e_cal.place(x=130, y=116)
 
 # Valor da Compra
 l_valor = Label(frame_meio, text='Valor da Compra', height=1, anchor=NW, bg=branco, fg=cor_letra)
-l_valor.place(x=10, y=115)
+l_valor.place(x=10, y=145)
 
 e_valor = Entry(frame_meio, width=30, justify='left', relief=SOLID)
-e_valor.place(x=130, y=116)
+e_valor.place(x=130, y=146)
 
 # Número de série
 l_serie = Label(frame_meio, text='Número de Série', height=1, anchor=NW, bg=branco, fg=cor_letra)
-l_serie.place(x=10, y=145)
+l_serie.place(x=10, y=175)
 
 e_serie = Entry(frame_meio, width=30, justify='left', relief=SOLID)
-e_serie.place(x=130, y=146)
+e_serie.place(x=130, y=176)
 
 # Imagem do item
 l_item = Label(frame_meio, text='Imagem do item', height=1, anchor=NW, bg=branco, fg=cor_letra)
-l_item.place(x=10, y=175)
+l_item.place(x=10, y=205)
 
 b_carregar = Button(frame_meio, text='Carregar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
-b_carregar.place(x=130, y=175)
+b_carregar.place(x=130, y=205)
 
 # Botão inserir
-b_inserir = Button(frame_meio, text='Adicionar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
+b_inserir = Button(frame_meio, command=inserir, text='Adicionar'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
 b_inserir.place(x=385, y=5)
 
 # Botão Atualizar
@@ -113,7 +165,7 @@ b_deletar.place(x=385, y=85)
 
 # Botão Ver Item
 b_ver_item = Button(frame_meio, text='Ver Item'.upper(), width=29, compound=CENTER, anchor=CENTER, overrelief=RIDGE, bg=branco, fg=cor_letra)
-b_ver_item.place(x=385, y=175)
+b_ver_item.place(x=385, y=205)
 
 # Labels Quantidade Total e Valores
 # Total
@@ -130,54 +182,55 @@ l_qtd_total = Label(frame_meio, text='Quantidade de itens', width=25, height=1, 
 l_qtd_total.place(x=650, y=135)
 
 # Trabalhando no frame de baixo
-# Criando a tabela
-tabela_head = ['#ID', 'Nome', 'Local', 'Descrição', 'Marca', 'Data da Compra', 'Valor da Compra', 'Número de Série']
 
-lista_itens = []
+def mostrar():
+    # Criando a tabela
+    tabela_head = ['#ID', 'Nome', 'Local', 'Descrição', 'Marca', 'Data da Compra', 'Valor da Compra', 'Número de Série']
 
-global tree
+    lista_itens = []
 
-tree = ttk.Treeview(frame_baixo, selectmode='extended', columns=tabela_head, show='headings')
+    tree = ttk.Treeview(frame_baixo, selectmode='extended', columns=tabela_head, show='headings')
 
-# Scrollbar vertical
-vsb = ttk.Scrollbar(frame_baixo, orient='vertical', command=tree.yview)
+    # Scrollbar vertical
+    vsb = ttk.Scrollbar(frame_baixo, orient='vertical', command=tree.yview)
 
-# Scrollbar horizontal
-hsb = ttk.Scrollbar(frame_baixo, orient='horizontal', command=tree.xview)
+    # Scrollbar horizontal
+    hsb = ttk.Scrollbar(frame_baixo, orient='horizontal', command=tree.xview)
 
-tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+    tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
 
-tree.grid(column=0, row=0, sticky='nsew')
-vsb.grid(column=1, row=0, sticky='ns')
-hsb.grid(column=0, row=1, sticky='ew')
-frame_baixo.grid_rowconfigure(0, weight=12)
+    tree.grid(column=0, row=0, sticky='nsew')
+    vsb.grid(column=1, row=0, sticky='ns')
+    hsb.grid(column=0, row=1, sticky='ew')
+    frame_baixo.grid_rowconfigure(0, weight=12)
 
-hd = ['center', 'center', 'center', 'center', 'center', 'center', 'center', 'center']
-h = [40, 150, 125, 260, 130, 160, 160, 160]
-n = 0
+    hd = ['center', 'center', 'center', 'center', 'center', 'center', 'center', 'center']
+    h = [40, 150, 125, 260, 130, 160, 160, 160]
+    n = 0
 
-for col in tabela_head:
-    tree.heading(col, text=col.title(), anchor=CENTER)
-    tree.column(col, width=h[n], anchor=hd[n])
+    for col in tabela_head:
+        tree.heading(col, text=col.title(), anchor=CENTER)
+        tree.column(col, width=h[n], anchor=hd[n])
 
-    n += 1
+        n += 1
 
-# Inserindo itens na tabela
-for item in lista_itens:
-    tree.insert('', 'end', values=item)
+    # Inserindo itens na tabela
+    for item in lista_itens:
+        tree.insert('', 'end', values=item)
 
-# Calculando valor total e total de itens
-quantidade = []
-for item in lista_itens:
-    quantidade.append(item[6])
+    # Calculando valor total e total de itens
+    quantidade = []
+    for item in lista_itens:
+        quantidade.append(item[6])
 
-total_valor = sum(quantidade)
-total_itens = len(quantidade)
+    total_valor = sum(quantidade)
+    total_itens = len(quantidade)
 
-# Atualizando os textos das labels
-l_total['text'] = f'R$ {total_valor:,.2f}'
-l_qtd['text'] = total_itens
+    # Atualizando os textos das labels
+    l_total['text'] = f'R$ {total_valor:,.2f}'
+    l_qtd['text'] = total_itens
 
+mostrar()
 
 janela.mainloop()
 
