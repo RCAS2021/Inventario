@@ -348,7 +348,7 @@ def mostrar():
     # Calculando valor total e total de itens
     quantidade = []
     for item in lista_itens:
-        quantidade.append(item[6])
+        quantidade.append(float(item[6].replace(",", ".")))
 
     total_valor = sum(quantidade)
     total_itens = len(quantidade)
